@@ -13,13 +13,41 @@ function Editor() {
     }, [])
     const handleChange = (event) => {
         setText(event.target.value)
-    }
 
+    }
+    let parsedText = text.split('\n'); let resInd = []
+    let res = parsedText.map((it, index) => {
+        if (it.includes('```')) {
+            let res = it.replace("```", "<code>")
+            resInd.push(index);
+            return res;
+        }
+        if (it.includes("### ")) {
+            let res = it.replace("### ", "<h3>").concat('</h3>');
+            return res;
+        }
+        else if (it.includes("## ")) {
+            let res = it.replace("## ", "<h2>").concat('</h2>');
+            return res;
+        } else if (it.includes("# ")) {
+            let res = it.replace("# ", "<h1>").concat('</h1>');
+            return res;
+        }
+        return it;
+
+    });
+    for (let i = 1; i < resInd.length; i += 2) {
+        res[resInd[i]] = " </code>"
+    }
+    console.log(res)
+    let content = res.map((it) => {
+        return parse(it)
+    })
     return <>
-        <div className="mx-auto w-1/2">  <textarea className="w-100" cols="100" rows="10" id="editor" onChange={handleChange}>
+        <div className="mx-auto w-1/2"><textarea className="w-100" cols="100" rows="10" id="editor" onChange={handleChange}>
             {text}
         </textarea></div>
-        <div id="preview" className="w-2/3 mx-auto">{parse(text)}</div>
+        <div id="preview" className="w-2/3 mx-auto">{content}</div>
     </>
 }
 export default Editor;
