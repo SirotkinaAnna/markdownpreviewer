@@ -33,7 +33,7 @@ function Editor() {
             let res = it.replace("# ", "<h1>").concat('</h1>');
             return res;
         }
-        return it;
+        return it.concat('<br />');
 
     });
     for (let i = 1; i < resInd.length; i += 2) {
@@ -43,6 +43,7 @@ function Editor() {
     let content = res.map((it) => {
         return parse(it)
     })
+    console.log(content)
     return <>
         <div className="mx-auto w-1/2"><textarea className="w-100" cols="100" rows="10" id="editor" onChange={handleChange}>
             {text}
